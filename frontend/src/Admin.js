@@ -1,38 +1,33 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Table from "react-bootstrap/Table";
 import "./Admin.css";
-import {
-  Card,
-  CardBody,
-  CardTitle,
-  CardText,
-  ListGroup,
-  ListGroupItem,
-} from "reactstrap";
 
 function Admin({ users }) {
   return (
     <section className="col-md-4">
-      <Card>
-        <CardBody>
-          <CardTitle className="font-weight-bold text-center">
-            All Users
-          </CardTitle>
-          <CardText>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </CardText>
-          <ListGroup>
-            {users.map((user) => (
-              <Link to={`/users/${user.id}`} key={user.id}>
-                <ListGroupItem>
-                  {user.firstName} {user.lastName}
-                </ListGroupItem>
-              </Link>
-            ))}
-          </ListGroup>
-        </CardBody>
-      </Card>
+      <h1 className="font-weight-bold text-center">All Users</h1>
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={`${user.id}`}>
+              <td>{user.id}</td>
+              <td>
+                <a href={`/users/${user.id}`}>{user.firstName}</a>
+              </td>
+              <td>{user.lastName}</td>
+              <td>{user.email}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </section>
   );
 }

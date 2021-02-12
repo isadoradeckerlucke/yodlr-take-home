@@ -1,23 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import NavBar from "./NavBar";
+import Admin from "./Admin";
+import User from "./User";
+import UsersApi from "./UsersApi";
+import NewUserForm from "./Signup";
 
 function Routes() {
   const [isLoading, setIsLoading] = useState(true);
-
+  const [users, setUsers] = useState([]);
   useEffect(() => {
-    async function getItems() {
-      // let drinks = await SnackOrBoozeApi.get("drinks");
-      // let snacks = await SnackOrBoozeApi.get("snacks");
-      // setDrinks(drinks);
-      // setSnacks(snacks);
+    async function getUsers() {
+      let users = await UsersApi.getUsers();
+      setUsers(users);
       setIsLoading(false);
     }
-    getItems();
+    getUsers();
   }, []);
 
   if (isLoading) {
     return <p>Loading &hellip;</p>;
+  }
+
+  async function handleAdd(formData) {
+    let newUser = await UsersApi.addUser(formData);
+    setUsers((users) => [...users, newUser]);
   }
 
   return (
@@ -30,23 +37,11 @@ function Routes() {
               <Admin users={users} />
             </Route>
             <Route path="/users/:id">
-              <Item users={users} />
+              <User users={users} cantFind="/" />
             </Route>
-            {/* <Route exact path="/snacks">
-              <Menu items={snacks} title="Snacks" itemType="Snack" />
+            <Route path="/signup">
+              <NewUserForm addUser={handleAdd} />
             </Route>
-            <Route exact path="/drinks">
-              <Menu items={drinks} title="Drinks" itemType="Drink" />
-            </Route>
-            <Route path="/drinks/:id">
-              <Item items={drinks} cantFind="/drinks" />
-            </Route>
-            <Route exact path="/all-items">
-              <FullMenu snackItems={snacks} drinkItems={drinks} />
-            </Route>
-            <Route exact path="/all-items/new">
-              <NewItemForm addItem={handleAdd} />
-            </Route> */}
             <Route>
               <p>Hmmm. I can't seem to find what you want.</p>
             </Route>

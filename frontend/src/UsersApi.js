@@ -8,7 +8,7 @@ class UsersApi {
     const params = method === "get" ? data : {};
 
     try {
-      return (await axios({ url, method, data, params, headers })).data;
+      return (await axios({ url, method, data, params })).data;
     } catch (err) {
       console.error("API Error:", err.response);
       let message = err.response.data.message;
@@ -17,11 +17,15 @@ class UsersApi {
   }
 
   static async getUsers() {
-    let res = await this.request("/");
-    console.log("res from api.js", res);
+    let res = await this.request("");
     return res;
   }
   //    add get by id method
+
+  static async addUser(data) {
+    let res = await this.request("", data, "post");
+    return res;
+  }
 }
 
 export default UsersApi;
